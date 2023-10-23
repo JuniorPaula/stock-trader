@@ -26,7 +26,7 @@ func CreateStock(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	helpers.WriteJSON(w, http.StatusOK, s)
+	helpers.WriteJSON(w, http.StatusCreated, s)
 }
 
 // ListStocks is a handler to call usecase and return a list of stocks
@@ -55,6 +55,20 @@ func UpdateStock(w http.ResponseWriter, r *http.Request) {
 	}
 
 	uc := ucStock.UpdateStockUsecase{Stock: stock}
+	statusCode, err := uc.Execute()
+	if err != nil {
+		helpers.ErrorJSON(w, statusCode, err.Error())
+		return
+	}
+
+	helpers.WriteJSON(w, http.StatusOK, nil)
+}
+
+// DeleteStock is a handler to call usecase and delete a stock
+func DeleteStock(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	uc := ucStock.DeleteStockUsecase{ID: helpers.StringToPrimitiveObjectID(id)}
 	statusCode, err := uc.Execute()
 	if err != nil {
 		helpers.ErrorJSON(w, statusCode, err.Error())
