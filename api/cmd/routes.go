@@ -15,6 +15,9 @@ func routes() http.Handler {
 	mux.Post("/users", handlers.CreateUser)
 	mux.Get("/users/{id}", handlers.GetUserByID)
 
+	// portfolios
+	mux.Post("/portfolios", handlers.CreatePortfolio)
+
 	// stocks
 	mux.Get("/stocks", handlers.ListStocks)
 	mux.Post("/stocks", handlers.CreateStock)
