@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // ReadJSON reads JSON from the request body into the data object.
@@ -60,4 +62,14 @@ func WriteJSON(w http.ResponseWriter, status int, data interface{}, headers ...h
 // It returns an error if the error message cannot be encoded as JSON.
 func ErrorJSON(w http.ResponseWriter, status int, message string) error {
 	return WriteJSON(w, status, map[string]string{"error": message})
+}
+
+// StringToPrimitiveObjectID converts a string to primitive.ObjectID
+func StringToPrimitiveObjectID(id string) primitive.ObjectID {
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return primitive.NilObjectID
+	}
+
+	return oid
 }
