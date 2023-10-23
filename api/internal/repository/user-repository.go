@@ -51,3 +51,17 @@ func (r *User) List() ([]models.User, error) {
 
 	return users, nil
 }
+
+// GetByID is a method to get a user by id in the database
+func (r *User) GetByID(id primitive.ObjectID) (models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var user models.User
+
+	if err := r.MongoDB.Collection("users").FindOne(ctx, bson.M{"_id": id}).Decode(&user); err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
