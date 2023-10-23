@@ -81,3 +81,17 @@ func (s *Stock) Delete(id primitive.ObjectID) error {
 
 	return nil
 }
+
+// GetByID returns a stock by id
+func (s *Stock) GetByID(id primitive.ObjectID) (models.Stock, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var stock models.Stock
+	err := s.MongoDB.Collection("stocks").FindOne(ctx, bson.M{"_id": id}).Decode(&stock)
+	if err != nil {
+		return models.Stock{}, err
+	}
+
+	return stock, nil
+}
