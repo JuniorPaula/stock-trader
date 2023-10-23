@@ -11,6 +11,7 @@ func routes() http.Handler {
 	mux := chi.NewRouter()
 
 	// users
+	mux.Get("/users", handlers.ListUsers)
 	mux.Post("/users", handlers.CreateUser)
 
 	// stocks

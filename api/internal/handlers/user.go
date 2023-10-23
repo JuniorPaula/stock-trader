@@ -26,3 +26,15 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	helpers.WriteJSON(w, http.StatusCreated, u)
 }
+
+// ListUsers is a method to list all users
+func ListUsers(w http.ResponseWriter, r *http.Request) {
+	uc := ucUser.ListUserUsecase{}
+	u, statusCode, err := uc.Execute()
+	if err != nil {
+		helpers.ErrorJSON(w, statusCode, err.Error())
+		return
+	}
+
+	helpers.WriteJSON(w, http.StatusOK, u)
+}
