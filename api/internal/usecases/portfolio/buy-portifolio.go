@@ -10,14 +10,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type CreatePortfolioUsecase struct {
+type BuyPortfolioUsecase struct {
 	Portfolio models.Portfolio
 }
 
 // Execute is a method to execute the usecase
 // It call the validations method and if it's ok, it calls the repository to create a new portfolio
 // It returns the created portfolio, the status code and an error
-func (uc *CreatePortfolioUsecase) Execute() (models.Portfolio, int, error) {
+func (uc *BuyPortfolioUsecase) Execute() (models.Portfolio, int, error) {
 	err := uc.validations()
 	if err != nil {
 		return models.Portfolio{}, http.StatusBadRequest, err
@@ -72,7 +72,7 @@ func (uc *CreatePortfolioUsecase) Execute() (models.Portfolio, int, error) {
 
 }
 
-func (uc *CreatePortfolioUsecase) validations() error {
+func (uc *BuyPortfolioUsecase) validations() error {
 	if uc.Portfolio.UserID == primitive.NilObjectID {
 		return errors.New("user_id is required")
 	}

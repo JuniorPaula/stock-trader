@@ -7,8 +7,8 @@ import (
 	ucPortfolio "stocktrader/internal/usecases/portfolio"
 )
 
-// CreatePortfolio is a method to create a new portfolio
-func CreatePortfolio(w http.ResponseWriter, r *http.Request) {
+// BuyPortfolio is a method to buy a new portfolio
+func BuyPortfolio(w http.ResponseWriter, r *http.Request) {
 	var p models.Portfolio
 
 	err := helpers.ReadJSON(w, r, &p)
@@ -17,7 +17,7 @@ func CreatePortfolio(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uc := ucPortfolio.CreatePortfolioUsecase{Portfolio: p}
+	uc := ucPortfolio.BuyPortfolioUsecase{Portfolio: p}
 	u, statusCode, err := uc.Execute()
 	if err != nil {
 		helpers.ErrorJSON(w, statusCode, err.Error())
