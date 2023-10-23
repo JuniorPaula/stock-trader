@@ -55,3 +55,16 @@ func (s *Stock) List() ([]models.Stock, error) {
 
 	return stocks, nil
 }
+
+// Update updates a stock
+func (s *Stock) Update(stock models.Stock) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := s.MongoDB.Collection("stocks").UpdateOne(ctx, bson.M{"_id": stock.ID}, bson.D{{Key: "$set", Value: stock}})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
