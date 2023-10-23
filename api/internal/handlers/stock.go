@@ -25,3 +25,14 @@ func CreateStock(w http.ResponseWriter, r *http.Request) {
 
 	helpers.WriteJSON(w, http.StatusOK, s)
 }
+
+func ListStocks(w http.ResponseWriter, r *http.Request) {
+	uc := ucStock.ListStocksUsecase{}
+	stocks, statusCode, err := uc.Execute()
+	if err != nil {
+		helpers.ErrorJSON(w, statusCode, err.Error())
+		return
+	}
+
+	helpers.WriteJSON(w, http.StatusOK, stocks)
+}

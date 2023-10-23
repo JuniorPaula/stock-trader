@@ -10,6 +10,7 @@ import (
 func routes() http.Handler {
 	mux := chi.NewRouter()
 
+	mux.Get("/stocks", handlers.ListStocks)
 	mux.Post("/stocks", handlers.CreateStock)
 
 	return mux
