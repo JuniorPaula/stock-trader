@@ -2,14 +2,27 @@ package database
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var (
+	connectString = ""
+)
+
 func Connect() (*mongo.Database, error) {
-	clientOptions := options.Client().ApplyURI("mongodb://admin:admin@localhost:27017")
+	connectString = fmt.Sprintf("mongodb://%s:%s@%s:%s",
+		os.Getenv("MONGO_INITDB_ROOT_USERNAME"),
+		os.Getenv("MONGO_INITDB_ROOT_PASSWORD"),
+		os.Getenv("MONGO_HOST"),
+		os.Getenv("MONGO_PORT"),
+	)
+
+	clientOptions := options.Client().ApplyURI(connectString)
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		return nil, err
@@ -24,7 +37,7 @@ func Connect() (*mongo.Database, error) {
 		client.Disconnect(context.Background())
 	})
 
-	db := client.Database("stocktrader")
+	db := client.Database(os.Getenv("MONGO_INITDB_DATABASE"))
 
 	return db, nil
 }

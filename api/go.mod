@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/go-chi/chi v1.5.5
+	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.12.1
 )
 
