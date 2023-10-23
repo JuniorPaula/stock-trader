@@ -7,6 +7,8 @@ import (
 	"stocktrader/internal/models"
 	"stocktrader/internal/repository"
 
+	ucUser "stocktrader/internal/usecases/user"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -43,13 +45,26 @@ func (uc *BuyPortfolioUsecase) Execute() (models.Portfolio, int, error) {
 	totalPrice := stock.Price * float64(uc.Portfolio.Quantity)
 
 	repoUser := repository.User{MongoDB: db}
-	user, err := repoUser.GetByID(uc.Portfolio.UserID)
+
+	userUsercase := ucUser.GetUserByIDUsecase{ID: uc.Portfolio.UserID}
+	user, statusCode, err := userUsercase.Execute()
 	if err != nil {
-		return models.Portfolio{}, http.StatusInternalServerError, err
+		return models.Portfolio{}, statusCode, err
 	}
 
 	if user.Founds < totalPrice {
 		return models.Portfolio{}, http.StatusBadRequest, errors.New("insufficient founds")
+	}
+
+	for _, p := range user.Portfolios {
+		if p.StockID == uc.Portfolio.StockID {
+			p.Quantity += uc.Portfolio.Quantity
+			err = repo.Update(p)
+			if err != nil {
+				return models.Portfolio{}, http.StatusInternalServerError, err
+			}
+			return p, http.StatusCreated, nil
+		}
 	}
 
 	user.Founds -= totalPrice
