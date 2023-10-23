@@ -12,6 +12,7 @@ func routes() http.Handler {
 
 	mux.Get("/stocks", handlers.ListStocks)
 	mux.Post("/stocks", handlers.CreateStock)
+	mux.Put("/stocks/{id}", handlers.UpdateStock)
 
 	return mux
 }
