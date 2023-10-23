@@ -30,3 +30,24 @@ func (r *Portfolio) Create(portfolio models.Portfolio) (primitive.ObjectID, erro
 
 	return primitive.NilObjectID, nil
 }
+
+// GetAllByUserID is a method to get all portfolios by user id
+// It receives a user id and returns a slice of portfolios and an error
+func (r *Portfolio) GetAllByUserID(userID primitive.ObjectID) ([]models.Portfolio, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var portfolios []models.Portfolio
+
+	cursor, err := r.MongoDB.Collection("portfolios").Find(ctx, map[string]interface{}{"user_id": userID})
+	if err != nil {
+		return portfolios, err
+	}
+
+	err = cursor.All(ctx, &portfolios)
+	if err != nil {
+		return portfolios, err
+	}
+
+	return portfolios, nil
+}
