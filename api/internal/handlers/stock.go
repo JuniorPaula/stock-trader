@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 	"stocktrader/internal/helpers"
 	"stocktrader/internal/models"
+	ucStock "stocktrader/internal/usecases/stock"
 )
 
 func CreateStock(w http.ResponseWriter, r *http.Request) {
@@ -16,7 +16,12 @@ func CreateStock(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("INFO: create stock:", stock)
+	uc := ucStock.CreateStockUsecase{Stock: stock}
+	s, statusCode, err := uc.Execute()
+	if err != nil {
+		helpers.WriteJSON(w, statusCode, err)
+		return
+	}
 
-	helpers.WriteJSON(w, http.StatusOK, stock)
+	helpers.WriteJSON(w, http.StatusOK, s)
 }
