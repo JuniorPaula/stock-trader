@@ -40,6 +40,24 @@ func (uc *CreatePortfolioUsecase) Execute() (models.Portfolio, int, error) {
 		return models.Portfolio{}, http.StatusInternalServerError, err
 	}
 
+	totalPrice := stock.Price * float64(uc.Portfolio.Quantity)
+
+	repoUser := repository.User{MongoDB: db}
+	user, err := repoUser.GetByID(uc.Portfolio.UserID)
+	if err != nil {
+		return models.Portfolio{}, http.StatusInternalServerError, err
+	}
+
+	if user.Founds < totalPrice {
+		return models.Portfolio{}, http.StatusBadRequest, errors.New("insufficient founds")
+	}
+
+	user.Founds -= totalPrice
+	err = repoUser.Update(user)
+	if err != nil {
+		return models.Portfolio{}, http.StatusInternalServerError, err
+	}
+
 	uc.Portfolio.Name = stock.Name
 	uc.Portfolio.Price = stock.Price
 
@@ -50,7 +68,8 @@ func (uc *CreatePortfolioUsecase) Execute() (models.Portfolio, int, error) {
 
 	uc.Portfolio.ID = insertedID
 
-	return uc.Portfolio, 200, nil
+	return uc.Portfolio, http.StatusCreated, nil
+
 }
 
 func (uc *CreatePortfolioUsecase) validations() error {

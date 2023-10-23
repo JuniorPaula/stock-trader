@@ -65,3 +65,17 @@ func (r *User) GetByID(id primitive.ObjectID) (models.User, error) {
 
 	return user, nil
 }
+
+// Update is a method to update a user in the database
+// It receives a user model and returns an error
+func (r *User) Update(user models.User) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	_, err := r.MongoDB.Collection("users").UpdateOne(ctx, bson.M{"_id": user.ID}, bson.M{"$set": user})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
