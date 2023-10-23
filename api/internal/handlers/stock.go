@@ -12,14 +12,14 @@ func CreateStock(w http.ResponseWriter, r *http.Request) {
 
 	err := helpers.ReadJSON(w, r, &stock)
 	if err != nil {
-		helpers.WriteJSON(w, http.StatusBadRequest, err)
+		helpers.ErrorJSON(w, http.StatusUnprocessableEntity, err.Error())
 		return
 	}
 
 	uc := ucStock.CreateStockUsecase{Stock: stock}
 	s, statusCode, err := uc.Execute()
 	if err != nil {
-		helpers.WriteJSON(w, statusCode, err)
+		helpers.ErrorJSON(w, statusCode, err.Error())
 		return
 	}
 

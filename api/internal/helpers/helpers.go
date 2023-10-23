@@ -55,3 +55,9 @@ func WriteJSON(w http.ResponseWriter, status int, data interface{}, headers ...h
 
 	return nil
 }
+
+// ErrorJSON writes the error message as JSON to the response body.
+// It returns an error if the error message cannot be encoded as JSON.
+func ErrorJSON(w http.ResponseWriter, status int, message string) error {
+	return WriteJSON(w, status, map[string]string{"error": message})
+}
