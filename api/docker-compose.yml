@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  mongodb:
+    image: "mongo"
+    container_name: mongodb_stocktrader
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "admin"
+      MONGO_INITDB_DATABASE: "stocktrader"
+    ports:
+      - 27017:27017
+    volumes:
+      - ../db:/data/db
