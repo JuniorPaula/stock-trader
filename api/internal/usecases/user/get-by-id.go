@@ -26,5 +26,13 @@ func (uc *GetUserByIDUsecase) Execute() (models.User, int, error) {
 		return models.User{}, http.StatusInternalServerError, err
 	}
 
+	portfolioRepo := repository.Portfolio{MongoDB: db}
+	portfolios, err := portfolioRepo.GetAllByUserID(uc.ID)
+	if err != nil {
+		return models.User{}, http.StatusInternalServerError, err
+	}
+
+	user.Portfolios = portfolios
+
 	return user, http.StatusOK, nil
 }
