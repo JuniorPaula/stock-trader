@@ -15,8 +15,12 @@ type Stock struct {
 	MongoDB *mongo.Database
 }
 
+// Create creates a new stock
 func (s *Stock) Create(stock models.Stock) (primitive.ObjectID, error) {
-	result, err := s.MongoDB.Collection("stocks").InsertOne(context.Background(), stock)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	result, err := s.MongoDB.Collection("stocks").InsertOne(ctx, stock)
 	if err != nil {
 		return primitive.NilObjectID, err
 	}
@@ -28,6 +32,7 @@ func (s *Stock) Create(stock models.Stock) (primitive.ObjectID, error) {
 	return primitive.NilObjectID, nil
 }
 
+// List returns all stocks
 func (s *Stock) List() ([]models.Stock, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

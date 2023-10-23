@@ -7,6 +7,7 @@ import (
 	ucStock "stocktrader/internal/usecases/stock"
 )
 
+// CreateStock is a handler to call usecase and create a new stock
 func CreateStock(w http.ResponseWriter, r *http.Request) {
 	var stock models.Stock
 
@@ -26,6 +27,7 @@ func CreateStock(w http.ResponseWriter, r *http.Request) {
 	helpers.WriteJSON(w, http.StatusOK, s)
 }
 
+// ListStocks is a handler to call usecase and return a list of stocks
 func ListStocks(w http.ResponseWriter, r *http.Request) {
 	uc := ucStock.ListStocksUsecase{}
 	stocks, statusCode, err := uc.Execute()

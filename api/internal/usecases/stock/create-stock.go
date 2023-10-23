@@ -12,6 +12,9 @@ type CreateStockUsecase struct {
 	Stock models.Stock
 }
 
+// Execute is a method to execute the usecase
+// It call the validations method and if it's ok, it calls the repository to create a new stock
+// It returns the created stock, the status code and an error
 func (uc *CreateStockUsecase) Execute() (models.Stock, int, error) {
 	err := uc.validations()
 	if err != nil {
@@ -37,6 +40,7 @@ func (uc *CreateStockUsecase) Execute() (models.Stock, int, error) {
 	return uc.Stock, http.StatusOK, nil
 }
 
+// validations is a method to validate the usecase fields
 func (uc *CreateStockUsecase) validations() error {
 	if uc.Stock.Name == "" {
 		return errors.New("name is required")
