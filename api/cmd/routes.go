@@ -10,6 +10,9 @@ import (
 func routes() http.Handler {
 	mux := chi.NewRouter()
 
+	// auth
+	mux.Post("/login", handlers.Login)
+
 	// users
 	mux.Get("/users", handlers.ListUsers)
 	mux.Post("/users", handlers.CreateUser)

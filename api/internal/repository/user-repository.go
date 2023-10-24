@@ -79,3 +79,17 @@ func (r *User) Update(user models.User) error {
 
 	return nil
 }
+
+// GetUserByEmail is a method to get a user by email in the database
+// It receives an email and returns a user model and an error
+func (r *User) GetByEmail(email string) (models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var user models.User
+	if err := r.MongoDB.Collection("users").FindOne(ctx, bson.M{"email": email}).Decode(&user); err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
