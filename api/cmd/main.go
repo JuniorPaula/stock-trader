@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 )
 
@@ -24,10 +25,16 @@ func main() {
 
 	fmt.Printf("Server is running on port %s\n", port)
 
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "OPTIONS", "POST", "PUT", "DELETE"},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type"},
+	})
+
 	// start server
 	srv := &http.Server{
 		Addr:    ":" + port,
-		Handler: routes(),
+		Handler: c.Handler(routes()),
 	}
 	err = srv.ListenAndServe()
 	if err != nil {
