@@ -35,7 +35,6 @@ export default {
                 user_id: 1,
                 quantity: this.quantity
             }
-            console.log(order)
             this.quantity = 0
         }
     },
