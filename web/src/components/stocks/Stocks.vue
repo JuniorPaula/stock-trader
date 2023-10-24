@@ -5,16 +5,31 @@
 </template>
 
 <script>
+import config from '../../config/config';
 import Stock from './Stock.vue';
 
 export default {
     components: { Stock },
-    computed: {
-        stocks() {
-            return this.$store.getters.stocks
+    data() {
+        return {
+            stocks: []
         }
+    },
+    methods: {
+        getStocks() {
+            fetch(`${config.API_URL}/stocks`)
+                .then(response => response.json())
+                .then(data => {
+                    this.stocks = data
+                })
+        }
+    },
+    created() {
+        this.getStocks()
     }
 }
 </script>
 
-<style></style>
+<style>
+
+</style>
