@@ -13,7 +13,7 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items>
-            <v-btn flat>Finalizar Dia</v-btn>
+            <v-btn @click="endDay" flat>Finalizar Dia</v-btn>
             <v-layout align-center>
                 <span class="text-uppercase grey--text text-darken-2">
                     Saldo: {{ founds | currency  }}
@@ -39,6 +39,18 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.founds = data.founds
+                })
+        },
+        endDay() {
+            fetch(`${config.API_URL}/stocks/random`)
+                .then(response => response.json())
+                .then(() => {
+                    alert('Novo dia iniciado com sucesso!')
+                    
+                    
+                })
+                .catch(error => {
+                    alert('ERROR ao iniciar um novo dia', error)
                 })
         }
     },
