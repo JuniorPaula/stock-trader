@@ -77,3 +77,15 @@ func DeleteStock(w http.ResponseWriter, r *http.Request) {
 
 	helpers.WriteJSON(w, http.StatusOK, nil)
 }
+
+// RandomStock is a handler to call usecase and return a random stock
+func RandomStock(w http.ResponseWriter, r *http.Request) {
+	uc := ucStock.RandomStockUsecase{}
+	statusCode, err := uc.Execute()
+	if err != nil {
+		helpers.ErrorJSON(w, statusCode, err.Error())
+		return
+	}
+
+	helpers.WriteJSON(w, http.StatusOK, nil)
+}

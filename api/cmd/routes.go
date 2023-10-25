@@ -27,6 +27,7 @@ func routes() http.Handler {
 	mux.Post("/stocks", handlers.CreateStock)
 	mux.Put("/stocks/{id}", handlers.UpdateStock)
 	mux.Delete("/stocks/{id}", handlers.DeleteStock)
+	mux.Get("/stocks/random", handlers.RandomStock)
 
 	return mux
 }
