@@ -10,13 +10,13 @@
         </v-card>
         <v-card>
             <v-container fill-height>
-                <v-text-field v-model.number="quantity" label="Quantidade" type="number"></v-text-field>
+                <v-text-field :error="quantity > stock.quantity || !Number.isInteger(quantity)" v-model.number="quantity" label="Quantidade" type="number"></v-text-field>
                 <v-btn 
-                    @click="sellStock" 
+                    @click="sellStock"
                     :disabled="quantity <= 0 || !Number.isInteger(quantity) || quantity > stock.quantity" 
                     class="blue darken-3 white--text"
                 >
-                    Vender
+                    {{ quantity > stock.quantity ? 'Insuficiente' : 'Vender'   }}
                 </v-btn>
             </v-container>
         </v-card>

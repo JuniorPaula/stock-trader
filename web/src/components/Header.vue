@@ -25,13 +25,37 @@
                     </v-list-tile>
                 </v-list>
             </v-menu>
+            <v-layout align-center>
+                <span class="text-uppercase grey--text text-darken-2">
+                    Saldo: {{ founds  }}
+                </span>
+            </v-layout>
         </v-toolbar-items>
     </v-toolbar>
 </template>
 
 <script>
-export default {
+import config from '@/config/config';
 
+export default {
+    data() {
+        return {
+            founds: 0
+        }
+    },
+    methods: {
+        getUserData() {
+            const user_id = '6536bd96345f7de7d8b9604c'
+            fetch(`${config.API_URL}/users/${user_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    this.founds = data.founds
+                })
+        }
+    },
+    created() {
+        this.getUserData()
+    }
 }
 </script>
 

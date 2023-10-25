@@ -7,13 +7,13 @@
         </v-card>
         <v-card>
             <v-container fill-height>
-                <v-text-field v-model.number="quantity" label="Quantidade" type="number"></v-text-field>
+                <v-text-field :error="insuficientFounds || !Number.isInteger(quantity)" v-model.number="quantity" label="Quantidade" type="number"></v-text-field>
                 <v-btn 
                     @click="buyStock" 
-                    :disabled="quantity <= 0 || !Number.isInteger(quantity)" 
+                    :disabled="insuficientFounds || quantity <= 0 || !Number.isInteger(quantity)" 
                     class="green darken-3 white--text"
                 >
-                    Comprar
+                    {{ insuficientFounds ? 'Insuficiente' : 'Comprar'  }}
                 </v-btn>
             </v-container>
         </v-card>
@@ -27,7 +27,14 @@ export default {
     props: ['stock'],
     data() {
         return {
-            quantity: 0
+            quantity: 0,
+            founds: 0
+        }
+    },
+
+    computed: {
+        insuficientFounds() {
+            return this.quantity * this.stock.price > this.founds
         }
     },
     methods: {
@@ -61,8 +68,19 @@ export default {
                 this.quantity = 0
             })
 
+        },
+        getUserData() {
+            const user_id = '6536bd96345f7de7d8b9604c'
+            fetch(`${config.API_URL}/users/${user_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    this.founds = data.founds
+                })
         }
     },
+    created() {
+        this.getUserData()
+    }
 }
 </script>
 
