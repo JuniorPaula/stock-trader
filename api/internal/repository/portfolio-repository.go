@@ -59,7 +59,6 @@ func (r *Portfolio) GetByID(id primitive.ObjectID) (models.Portfolio, error) {
 	defer cancel()
 
 	var portfolio models.Portfolio
-
 	err := r.MongoDB.Collection("portfolios").FindOne(ctx, map[string]interface{}{"_id": id}).Decode(&portfolio)
 	if err != nil {
 		return portfolio, err

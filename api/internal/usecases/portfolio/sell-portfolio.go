@@ -8,6 +8,7 @@ import (
 	"stocktrader/internal/repository"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type SellPortfolioUsecase struct {
@@ -34,9 +35,11 @@ func (uc *SellPortfolioUsecase) Execute() (models.Portfolio, int, error) {
 
 	portfolio, err := repo.GetByID(uc.Portfolio.ID)
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return models.Portfolio{}, http.StatusNotFound, errors.New("portfolio not found")
+		}
 		return models.Portfolio{}, http.StatusInternalServerError, err
 	}
-
 	if portfolio.Quantity < uc.Portfolio.Quantity {
 		return models.Portfolio{}, http.StatusBadRequest, errors.New("insufficient quantity")
 	}
