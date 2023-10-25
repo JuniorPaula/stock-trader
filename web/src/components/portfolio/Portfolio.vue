@@ -13,33 +13,44 @@ export default {
     components: { Stock },
     data() {
         return {
-            stocks: []
+            stocks: [],
+            user: {}
         }
     },
     methods: {
         getUserStocks() {
-            const user_id = '6536bd96345f7de7d8b9604c'
-            fetch(`${config.API_URL}/users/${user_id}`)
+            fetch(`${config.API_URL}/api/users/${this.user.user_id}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.user.token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.stocks = data.portfolios
+
+                fetch(`${config.API_URL}/api/stocks`, {
+                    headers: {
+                        'Authorization': `Bearer ${this.user.token}`
+                    }
+                })
                 .then(response => response.json())
                 .then(data => {
-                    this.stocks = data.portfolios
-
-                    fetch(`${config.API_URL}/stocks`)
-                        .then(response => response.json())
-                        .then(data => {
-                            this.stocks = this.stocks.map(stock => {
-                                const stockData = data.find(item => item._id === stock.stock_id)
-                                return {
-                                    portfolio_id: stock._id,
-                                    ...stock,
-                                    ...stockData
-                                }
-                            })
-                        })
+                    this.stocks = this.stocks.map(stock => {
+                        const stockData = data.find(item => item._id === stock.stock_id)
+                        return {
+                            portfolio_id: stock._id,
+                            ...stock,
+                            ...stockData
+                        }
+                    })
                 })
+            })
         }
     },
     created() {
+        const userData = localStorage.getItem('__user__')
+        this.user = JSON.parse(userData)
+
         this.getUserStocks() 
     },
 

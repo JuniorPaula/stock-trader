@@ -31,7 +31,8 @@ export default {
     props: ['stock', 'updateStocks'],
     data() {
         return {
-            quantity: 0
+            quantity: 0,
+            user: {}
         }
     },
     methods: {
@@ -41,11 +42,12 @@ export default {
                 user_id: this.stock.user_id,
                 quantity: this.quantity
             }
-            
-            fetch(`${config.API_URL}/sell-portfolio`, {
+
+            fetch(`${config.API_URL}/api/sell-portfolio`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.user.token}`
                 },
                 body: JSON.stringify(order)
             })
@@ -66,6 +68,10 @@ export default {
             })
         }
     },
+    created() {
+        const useData = localStorage.getItem('__user__')
+        this.user = JSON.parse(useData)
+    }
 }
 </script>
 

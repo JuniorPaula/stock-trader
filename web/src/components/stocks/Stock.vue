@@ -39,17 +39,20 @@ export default {
     },
     methods: {
         buyStock() {
-            const user_id = '6536bd96345f7de7d8b9604c'
+            const useData = localStorage.getItem('__user__')
+            const user = JSON.parse(useData)
+
             const order = {
                 stock_id: this.stock._id,
-                user_id: user_id,
+                user_id: user.user_id,
                 quantity: this.quantity
             }
 
-            fetch(`${config.API_URL}/buy-portfolio`, {
+            fetch(`${config.API_URL}/api/buy-portfolio`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
                 },
                 body: JSON.stringify(order)
             })
@@ -70,8 +73,14 @@ export default {
 
         },
         getUserData() {
-            const user_id = '6536bd96345f7de7d8b9604c'
-            fetch(`${config.API_URL}/users/${user_id}`)
+            const useData = localStorage.getItem('__user__')
+            const user = JSON.parse(useData)
+
+            fetch(`${config.API_URL}/api/users/${user.user_id}`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     this.founds = data.founds

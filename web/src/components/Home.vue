@@ -25,12 +25,18 @@ export default {
     },
     methods: {
         getUserData() {
-            const user_id = '6536bd96345f7de7d8b9604c'
-            fetch(`${config.API_URL}/users/${user_id}`)
-                .then(response => response.json())
-                .then(data => {
-                    this.founds = data.founds
-                })
+            const useData = localStorage.getItem('__user__')
+            const user = JSON.parse(useData)
+
+            fetch(`${config.API_URL}/api/users/${user.user_id}`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.founds = data.founds
+            })
         }
     },
     created() {

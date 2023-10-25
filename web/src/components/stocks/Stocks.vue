@@ -17,7 +17,14 @@ export default {
     },
     methods: {
         getStocks() {
-            fetch(`${config.API_URL}/stocks`)
+            const useData = localStorage.getItem('__user__')
+            const user = JSON.parse(useData)
+
+            fetch(`${config.API_URL}/api/stocks`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     this.stocks = data

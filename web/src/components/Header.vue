@@ -34,24 +34,37 @@ export default {
     },
     methods: {
         getUserData() {
-            const user_id = '6536bd96345f7de7d8b9604c'
-            fetch(`${config.API_URL}/users/${user_id}`)
-                .then(response => response.json())
-                .then(data => {
-                    this.founds = data.founds
-                })
+            const useData = localStorage.getItem('__user__')
+            const user = JSON.parse(useData)
+
+            fetch(`${config.API_URL}/api/users/${user.user_id}`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.founds = data.founds
+            })
         },
         endDay() {
-            fetch(`${config.API_URL}/stocks/random`)
-                .then(response => response.json())
-                .then(() => {
-                    alert('Novo dia iniciado com sucesso!')
-                    
-                    
-                })
-                .catch(error => {
-                    alert('ERROR ao iniciar um novo dia', error)
-                })
+            const useData = localStorage.getItem('__user__')
+            const user = JSON.parse(useData)
+
+            fetch(`${config.API_URL}/api/stocks/random`, {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+            .then(response => response.json())
+            .then(() => {
+                alert('Novo dia iniciado com sucesso!')
+                
+                
+            })
+            .catch(error => {
+                alert('ERROR ao iniciar um novo dia', error)
+            })
         }
     },
     created() {
