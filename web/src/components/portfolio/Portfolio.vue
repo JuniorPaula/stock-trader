@@ -22,6 +22,18 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.stocks = data.portfolios
+
+                    fetch(`${config.API_URL}/stocks`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.stocks = this.stocks.map(stock => {
+                                const stockData = data.find(item => item._id === stock.stock_id)
+                                return {
+                                    ...stock,
+                                    ...stockData
+                                }
+                            })
+                        })
                 })
         }
     },
