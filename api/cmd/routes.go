@@ -12,6 +12,7 @@ func routes() http.Handler {
 
 	// auth
 	mux.Post("/login", handlers.Login)
+	mux.Post("/signup", handlers.SignUp)
 
 	// users
 	mux.Get("/users", handlers.ListUsers)
