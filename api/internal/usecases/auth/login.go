@@ -6,6 +6,8 @@ import (
 	"stocktrader/internal/database"
 	"stocktrader/internal/models"
 	"stocktrader/internal/repository"
+
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type LoginUsecase struct {
@@ -29,7 +31,10 @@ func (uc *LoginUsecase) Execute() (models.Credentials, int, error) {
 	userRepo := repository.User{MongoDB: db}
 	user, err := userRepo.GetByEmail(uc.Auth.Email)
 	if err != nil {
-		return models.Credentials{}, http.StatusNotFound, err
+		if err == mongo.ErrNoDocuments {
+			return models.Credentials{}, http.StatusUnauthorized, errors.New("invalid credentials")
+		}
+		return models.Credentials{}, http.StatusInternalServerError, err
 	}
 	validPassword, err := uc.Auth.PasswordMatch(user.Password, uc.Auth.Password)
 	if !validPassword || err != nil {
