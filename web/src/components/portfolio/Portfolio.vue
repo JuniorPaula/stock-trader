@@ -1,6 +1,7 @@
 <template>
     <v-layout row wrap>
-        <Stock v-for="stock in stocks" :key="stock.id" :stock="stock" />
+        <!-- :updateStocks listen event from Stock child component-->
+        <Stock :updateStocks="getUserStocks" v-for="stock in stocks" :key="stock.id" :stock="stock" />
     </v-layout>
 </template>
 
@@ -29,6 +30,7 @@ export default {
                             this.stocks = this.stocks.map(stock => {
                                 const stockData = data.find(item => item._id === stock.stock_id)
                                 return {
+                                    portfolio_id: stock._id,
                                     ...stock,
                                     ...stockData
                                 }
@@ -38,8 +40,8 @@ export default {
         }
     },
     created() {
-        this.getUserStocks()
-    }
+        this.getUserStocks() 
+    },
 
 }
 </script>
