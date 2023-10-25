@@ -63,6 +63,13 @@ func (uc *BuyPortfolioUsecase) Execute() (models.Portfolio, int, error) {
 			if err != nil {
 				return models.Portfolio{}, http.StatusInternalServerError, err
 			}
+
+			user.Founds -= totalPrice
+			err = repoUser.Update(user)
+			if err != nil {
+				return models.Portfolio{}, http.StatusInternalServerError, err
+			}
+
 			return p, http.StatusCreated, nil
 		}
 	}
