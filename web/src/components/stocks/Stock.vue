@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import config from '../../config/config'
+
 export default {
     props: ['stock'],
     data() {
@@ -30,12 +32,35 @@ export default {
     },
     methods: {
         buyStock() {
+            const user_id = '6536bd96345f7de7d8b9604c'
             const order = {
-                stock_id: this.stock.id,
-                user_id: 1,
+                stock_id: this.stock._id,
+                user_id: user_id,
                 quantity: this.quantity
             }
-            this.quantity = 0
+
+            fetch(`${config.API_URL}/buy-portfolio`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(order)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.error) {
+                    alert(data.error)
+                } else {
+                    alert('Compra realizada com sucesso!')
+                }
+            })
+            .catch(error => {
+                alert('ERROR ao realizar a compra', error)
+            })
+            .finally(() => {
+                this.quantity = 0
+            })
+
         }
     },
 }
