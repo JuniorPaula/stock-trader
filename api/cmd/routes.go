@@ -14,21 +14,26 @@ func routes() http.Handler {
 	mux.Post("/login", handlers.Login)
 	mux.Post("/signup", handlers.SignUp)
 
-	// users
-	mux.Get("/users", handlers.ListUsers)
-	mux.Post("/users", handlers.CreateUser)
-	mux.Get("/users/{id}", handlers.GetUserByID)
+	mux.Route("/api", func(mux chi.Router) {
+		// middleware
+		mux.Use(Auth)
 
-	// portfolios
-	mux.Post("/buy-portfolio", handlers.BuyPortfolio)
-	mux.Post("/sell-portfolio", handlers.SellPortfolio)
+		// users
+		mux.Get("/users", handlers.ListUsers)
+		mux.Post("/users", handlers.CreateUser)
+		mux.Get("/users/{id}", handlers.GetUserByID)
 
-	// stocks
-	mux.Get("/stocks", handlers.ListStocks)
-	mux.Post("/stocks", handlers.CreateStock)
-	mux.Put("/stocks/{id}", handlers.UpdateStock)
-	mux.Delete("/stocks/{id}", handlers.DeleteStock)
-	mux.Get("/stocks/random", handlers.RandomStock)
+		// portfolios
+		mux.Post("/buy-portfolio", handlers.BuyPortfolio)
+		mux.Post("/sell-portfolio", handlers.SellPortfolio)
+
+		// stocks
+		mux.Get("/stocks", handlers.ListStocks)
+		mux.Post("/stocks", handlers.CreateStock)
+		mux.Put("/stocks/{id}", handlers.UpdateStock)
+		mux.Delete("/stocks/{id}", handlers.DeleteStock)
+		mux.Get("/stocks/random", handlers.RandomStock)
+	})
 
 	return mux
 }

@@ -93,3 +93,17 @@ func (r *User) GetByEmail(email string) (models.User, error) {
 
 	return user, nil
 }
+
+// GetByToken is a method to get a user by token in the database
+// It receives a token and returns a user model and an error
+func (r *User) GetByToken(token string) (models.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var user models.User
+	if err := r.MongoDB.Collection("users").FindOne(ctx, bson.M{"token": token}).Decode(&user); err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
