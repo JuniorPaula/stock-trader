@@ -39,6 +39,12 @@ func (uc *LoginUsecase) Execute() (models.Credentials, int, error) {
 	if err != nil {
 		return models.Credentials{}, http.StatusBadRequest, err
 	}
+	// update user token
+	user.Token = credentials.Token
+	err = userRepo.Update(user)
+	if err != nil {
+		return models.Credentials{}, http.StatusInternalServerError, err
+	}
 
 	return *credentials, http.StatusOK, nil
 }

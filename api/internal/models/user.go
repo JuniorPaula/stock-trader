@@ -9,4 +9,5 @@ type User struct {
 	Password   string             `json:"password,omitempty" bson:"password,omitempty"`
 	Founds     float64            `json:"founds,omitempty" bson:"founds,omitempty"`
 	Portfolios []Portfolio        `json:"portfolios,omitempty" bson:"portfolios,omitempty"`
+	Token      string             `json:"token,omitempty" bson:"token,omitempty"`
 }
