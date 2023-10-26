@@ -1,6 +1,6 @@
 <template>
 	<v-app>
-		<Header v-if="showSignup" />
+		<Header v-if="isLogged" />
 		<v-content>
 			<v-container>
 				<router-view></router-view>
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Header from './components/Header.vue'
 
 export default {
@@ -18,10 +19,10 @@ export default {
 	},
 	data() {
 		return {
-			showSignup: false,
 			user: {}
 		}
 	},
+	computed: mapState(['isLogged']),
 	methods: {
 
 	},
@@ -31,7 +32,7 @@ export default {
 			this.$router.push('/login')
 		} else {
 			// has user
-			this.showSignup = true
+			this.isLogged = true
 		}
 
 	},

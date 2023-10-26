@@ -51,6 +51,7 @@ export default {
                     alert('Crdenciais inválidas!')
                     return
                 }
+                this.$store.commit('setLogged', true)
                 localStorage.setItem('__user__', JSON.stringify(res))
                 this.$router.push('/')
             })
@@ -58,9 +59,6 @@ export default {
                 alert("ERROR::", err)
             })
         },
-        signup() {
-            // ...
-        }
     },
 }
 

@@ -19,6 +19,7 @@
                     Saldo: {{ founds | currency  }}
                 </span>
             </v-layout>
+            <v-btn @click="logout" flat>Sair</v-btn>
         </v-toolbar-items>
     </v-toolbar>
 </template>
@@ -65,6 +66,11 @@ export default {
             .catch(error => {
                 alert('ERROR ao iniciar um novo dia', error)
             })
+        },
+        logout() {
+            this.$store.commit('setLogged', false)
+            localStorage.removeItem('__user__')
+            this.$router.push('/login')
         }
     },
     created() {
