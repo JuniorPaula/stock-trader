@@ -45,7 +45,7 @@ export default {
             })
             .then(response => response.json())
             .then(data => {
-                this.founds = data.founds
+                this.founds = data.founds ? data.founds : 0
             })
         },
         endDay() {
