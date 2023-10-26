@@ -10,7 +10,7 @@
             <span class="headline white--text font-weight-light">Click em 'Finalizar Dia' para iniciar um novo dia.</span>
         </v-sheet>
         <v-divider class="my-4" />
-        <p class="display-1"><strong>Seu Saldo:</strong> {{ founds }}</p>
+        <p class="display-1">Olá {{ this.user.username }}, <strong>Seu Saldo hoje é:</strong> {{ founds | currency }}</p>
     </div>
 </template>
 
@@ -20,13 +20,15 @@ import config from '@/config/config';
 export default {
     data() {
         return {
-            founds: 0
+            founds: 0,
+            user: {}
         }
     },
     methods: {
         getUserData() {
             const useData = localStorage.getItem('__user__')
             const user = JSON.parse(useData)
+            this.user = user
 
             fetch(`${config.API_URL}/api/users/${user.user_id}`, {
                 headers: {
